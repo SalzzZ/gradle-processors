@@ -73,6 +73,10 @@ Building from source
 To build the project from source, run `./gradlew build`, or `gradlew.bat build` on Windows,
 in the root directory of your checkout. You will need Java installed.
 
+Difference from upstream
+-------
+current IntelliJ idea sets the annotation processor configuration globally, while for multi-projects gradle build, this plugin need to be applied per-module, thus might be inefficient. Moreover, we build in-house processor. idea won't build if all projects use the same settings (use classpath to find processors). The processors module need different config (disable AP). So I'll just put idea configuration in a separate gradle file, applied only once, to the root build.gradle
+
 License
 -------
 
