@@ -20,13 +20,6 @@ class ProcessorsPlugin implements Plugin<Project> {
     project.configurations.create('processor')
 
     project.extensions.create('processors', ProcessorsExtension)
-    project.processors {
-      // Used by Eclipse and IDEA
-      sourceOutputDir = 'src/main/java-generated'
-
-      // Used by IDEA (Eclipse does not compile test sources separately)
-      testSourceOutputDir = 'src/test/java-generated'
-    }
 
     /**** javac, groovy, etc. *********************************************************************/
     project.plugins.withType(JavaPlugin, { plugin ->
@@ -67,9 +60,4 @@ class ProcessorsPlugin implements Plugin<Project> {
     return project.files(config.getFiles({ d -> true } as Spec<Object>))
   }
 
-}
-
-class ProcessorsExtension {
-  String sourceOutputDir
-  String testSourceOutputDir
 }
