@@ -22,10 +22,10 @@ class ProcessorsPlugin implements Plugin<Project> {
     project.extensions.create('processors', ProcessorsExtension)
     project.processors {
       // Used by Eclipse and IDEA
-      sourceOutputDir = 'generated_src'
+      sourceOutputDir = 'src/main/java-generated'
 
       // Used by IDEA (Eclipse does not compile test sources separately)
-      testSourceOutputDir = 'generated_testSrc'
+      testSourceOutputDir = 'src/test/java-generated'
     }
 
     /**** javac, groovy, etc. *********************************************************************/
@@ -44,89 +44,6 @@ class ProcessorsPlugin implements Plugin<Project> {
         }
       })
     })
-
-    /**** Eclipse *********************************************************************************/
-    project.plugins.withType(EclipsePlugin, { plugin ->
-      project.eclipse {
-        classpath.plusConfigurations += [project.configurations.processor]
-        if (jdt != null) {
-          jdt.file.withProperties {
-            it['org.eclipse.jdt.core.compiler.processAnnotations'] = 'enabled'
-          }
-        }
-      }
-
-      templateTask(
-          project,
-          'eclipseAptPrefs',
-          'org/inferred/gradle/apt-prefs.template',
-          '.settings/org.eclipse.jdt.apt.core.prefs',
-          [
-            sourceOutputDir: project.processors.sourceOutputDir,
-            deps: project.configurations.processor
-          ]
-      )
-      project.tasks.eclipse.dependsOn project.tasks.eclipseAptPrefs
-      project.tasks.cleanEclipse.dependsOn project.tasks.cleanEclipseAptPrefs
-
-      templateTask(
-          project,
-          'eclipseFactoryPath',
-          'org/inferred/gradle/factorypath.template',
-          '.factorypath',
-          [deps: project.configurations.processor]
-      )
-      project.tasks.eclipse.dependsOn project.tasks.eclipseFactoryPath
-      project.tasks.cleanEclipse.dependsOn project.tasks.cleanEclipseFactoryPath
-    })
-
-    /**** IntelliJ ********************************************************************************/
-    project.plugins.withType(IdeaPlugin, { plugin ->
-      if (project.idea.module.scopes.PROVIDED != null) {
-        project.idea.module.scopes.PROVIDED.plus += [project.configurations.processor]
-      }
-
-      addGeneratedSourceFolder(project, project.processors.sourceOutputDir, false)
-      addGeneratedSourceFolder(project, project.processors.testSourceOutputDir, true)
-
-      // Root project configuration
-      if (project.rootProject.idea.project != null) {
-        project.rootProject.idea.project.ipr {
-          withXml {
-            updateIdeaCompilerConfiguration(project, node)
-          }
-        }
-      }
-    })
-
-    // If the project uses .idea directory structure, update compiler.xml directly
-    File ideaCompilerXml = project.file('.idea/compiler.xml')
-    if (ideaCompilerXml.isFile()) {
-      Node parsedProjectXml = (new XmlParser()).parse(ideaCompilerXml)
-      updateIdeaCompilerConfiguration(project, parsedProjectXml)
-      ideaCompilerXml.withWriter { writer ->
-        XmlNodePrinter nodePrinter = new XmlNodePrinter(new PrintWriter(writer))
-        nodePrinter.setPreserveWhitespace(true)
-        nodePrinter.print(parsedProjectXml)
-      }
-    }
-
-    /**** FindBugs ********************************************************************************/
-    project.tasks.withType(FindBugs, { task -> task.doFirst {
-      // Exclude generated sources from FindBugs' traversal.
-      // This trick relies on javac putting the generated .java files next to the .class files.
-      def generatedSources = task.classes.filter {
-        it.path.endsWith '.java'
-      }
-      task.classes = task.classes.filter {
-        File javaFile = new File(it.path
-            .replaceFirst(/\$\w+\.class$/, '')
-            .replaceFirst(/\.class$/, '')
-            + '.java')
-        boolean isGenerated = generatedSources.contains(javaFile)
-        return !isGenerated
-      }
-    }})
   }
 
   /** Runs {@code action} on element {@code name} in {@code collection} whenever it is added. */
@@ -148,90 +65,6 @@ class ProcessorsPlugin implements Plugin<Project> {
   static FileCollection getProcessors(Project project) {
     ResolvedConfiguration config = project.configurations.processor.resolvedConfiguration
     return project.files(config.getFiles({ d -> true } as Spec<Object>))
-  }
-
-  static void templateTask(project, taskName, templateFilename, outputFilename, binding) {
-    def outputFile = new File(project.projectDir, outputFilename)
-    def cleanTaskName = "clean" + taskName.substring(0, 1).toUpperCase() + taskName.substring(1)
-    project.task(taskName, {
-      binding.each{ k, v -> inputs.property k, v }
-      outputs.file outputFile
-      doLast {
-        outputFile.parentFile.mkdirs()
-        def stream = getClass().classLoader.getResourceAsStream templateFilename
-        try {
-          def reader = new InputStreamReader(stream, "UTF-8")
-          def template = new SimpleTemplateEngine().createTemplate(reader)
-          def writable = template.make binding
-          def writer = new FileWriter(outputFile)
-          try {
-            writable.writeTo(writer)
-          } finally {
-            writer.close()
-          }
-        } finally {
-          stream.close()
-        }
-      }
-    })
-
-    project.task(cleanTaskName, {
-      doLast {
-        outputFile.delete()
-      }
-    })
-  }
-
-  static void updateIdeaCompilerConfiguration(Project project, Node projectConfiguration) {
-    Object compilerConfiguration = projectConfiguration.component
-            .find { it.@name == 'CompilerConfiguration' }
-
-    if (compilerConfiguration == null) {
-      throw new GradleException("Unable to find CompilerConfiguration element")
-    }
-
-    compilerConfiguration.annotationProcessing.replaceNode{
-      annotationProcessing() {
-        profile(default: 'true', name: 'Default', enabled: 'true') {
-          sourceOutputDir(name: project.processors.sourceOutputDir)
-          sourceTestOutputDir(name: project.processors.testSourceOutputDir)
-          outputRelativeToContentRoot(value: 'true')
-          processorPath(useClasspath: 'true')
-        }
-      }
-    }
-  }
-
-  private static void addGeneratedSourceFolder(
-          Project project,
-          String sourceOutputDir,
-          boolean isTest) {
-    File generatedSourceOutputDir = project.file(sourceOutputDir)
-
-    // add generated directory as source directory
-    project.idea.module.generatedSourceDirs += generatedSourceOutputDir
-    if (!isTest) {
-      project.idea.module.sourceDirs += generatedSourceOutputDir
-    } else {
-      project.idea.module.testSourceDirs += generatedSourceOutputDir
-    }
-
-    // if generated source directory doesn't already exist, Gradle IDEA plugin will not add it as a source folder,
-    // so manually add as generated source folder to the .iml
-    if (!generatedSourceOutputDir.exists()) {
-      project.idea.module.iml {
-        withXml {
-          def content = node.component.content[0]
-          content.appendNode(
-                  'sourceFolder', [
-                  url         : "file://\$MODULE_DIR\$/${sourceOutputDir}",
-                  isTestSource: "${isTest}",
-                  generated   : "true"
-          ]
-          )
-        }
-      }
-    }
   }
 
 }
