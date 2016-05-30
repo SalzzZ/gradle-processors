@@ -19,8 +19,6 @@ class ProcessorsPlugin implements Plugin<Project> {
 
     project.configurations.create('processor')
 
-    project.extensions.create('processors', ProcessorsExtension)
-
     /**** javac, groovy, etc. *********************************************************************/
     project.plugins.withType(JavaPlugin, { plugin ->
       project.sourceSets.each { it.compileClasspath += project.configurations.processor }
@@ -60,7 +58,4 @@ class ProcessorsPlugin implements Plugin<Project> {
     return project.files(config.getFiles({ d -> true } as Spec<Object>))
   }
 
-}
-
-class ProcessorsExtension {
 }
