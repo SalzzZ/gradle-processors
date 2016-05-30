@@ -61,3 +61,6 @@ class ProcessorsPlugin implements Plugin<Project> {
   }
 
 }
+
+class ProcessorsExtension {
+}
