@@ -9,8 +9,8 @@ A plugin for Gradle that cleans up integration of Java 6+ [annotation processors
 [IDEA]: https://docs.gradle.org/current/userguide/idea_plugin.html
 [FindBugs]: https://docs.gradle.org/current/userguide/findbugs_plugin.html
 
-[![GitHub release](https://img.shields.io/github/release/palantir/gradle-processors.svg?maxAge=2592000)](https://plugins.gradle.org/plugin/org.inferred.processors)
-[![Travis](https://img.shields.io/travis/palantir/gradle-processors.svg?maxAge=2592000)](https://travis-ci.org/palantir/gradle-processors)
+[![GitHub release](https://img.shields.io/github/release/palantir/gradle-processors.svg?maxAge=60)](https://plugins.gradle.org/plugin/org.inferred.processors)
+[![Travis](https://img.shields.io/travis/palantir/gradle-processors.svg?maxAge=60)](https://travis-ci.org/palantir/gradle-processors)
 [![license](https://img.shields.io/github/license/palantir/gradle-processors.svg?maxAge=2592000)](http://www.apache.org/licenses/LICENSE-2.0)
 
 Quickstart
@@ -21,7 +21,7 @@ To use it, add the following to your projects' build.gradle file:
 ```gradle
 
 plugins {
-  id 'org.inferred.processors' version '1.2.1'
+  id 'org.inferred.processors' version '<LATEST VERSION>'
 }
 ```
 
@@ -35,7 +35,7 @@ dependencies {
 ```
 
 The `eclipse` and `idea` tasks will now configure your IDE to run annotation processors as part
-of thier regular compilation. Alternatively, you can continue to open your build.gradle file
+of their regular compilation. Alternatively, you can continue to open your build.gradle file
 directly from within IntelliJ.
 
 Gradle 2.0 and earlier
@@ -53,7 +53,7 @@ buildscript {
     }
   }
   dependencies {
-    classpath 'gradle.plugin.org.inferred:gradle-processors:1.2.1'
+    classpath 'gradle.plugin.org.inferred:gradle-processors:<LATEST VERSION>'
   }
 }
 ```

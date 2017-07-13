@@ -26,9 +26,11 @@ class ProcessorsPluginTest {
   public void addsSourceDirectoryConfiguration() {
     Project project = ProjectBuilder.builder().build()
     project.pluginManager.apply 'org.inferred.processors'
+    project.pluginManager.apply 'idea'
+    project.pluginManager.apply 'java'
 
-    assertEquals 'generated_src', project.processors.sourceOutputDir
-    assertEquals 'generated_testSrc', project.processors.testSourceOutputDir
+    assertEquals 'generated_src', project.idea.processors.outputDir
+    assertEquals 'generated_testSrc', project.idea.processors.testOutputDir
   }
 
   @Test
@@ -66,4 +68,14 @@ class ProcessorsPluginTest {
     assertTrue project.idea.module.generatedSourceDirs.contains(project.file('generated_testSrc'))
   }
 
+  @Test
+  public void addsEclipseConfigurationTasks_eclipseFirst() {
+    Project project = ProjectBuilder.builder().build()
+    project.pluginManager.apply 'org.inferred.processors'
+    project.pluginManager.apply 'eclipse'
+    project.pluginManager.apply 'java'
+
+    assertNotNull project.tasks.eclipseAptPrefs
+    assertNotNull project.tasks.eclipseFactoryPath
+  }
 }
