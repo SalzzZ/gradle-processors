@@ -11,6 +11,7 @@ repositories {
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
+group = "com.traveloka.common.gradle"
 
 dependencies {
   compile localGroovy()
@@ -40,7 +41,6 @@ dependencies {
 }
 
 test {
-  ignoreFailures = true
   testLogging {
     exceptionFormat = 'full'
   }
