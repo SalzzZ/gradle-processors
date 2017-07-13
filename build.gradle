@@ -15,8 +15,28 @@ targetCompatibility = 1.7
 dependencies {
   compile localGroovy()
   compile 'org.codehaus.groovy:groovy-backports-compat23:2.3.5'
+}
+
+//// Tests ////////////////////////////////////////////////////////////////////////////
+
+// Write the plugin's classpath to a file to share with the tests
+task createClasspathManifest {
+  def outputDir = file("$buildDir/$name")
+
+  inputs.files sourceSets.main.runtimeClasspath
+  outputs.dir outputDir
+
+  doLast {
+    outputDir.mkdirs()
+    file("$outputDir/plugin-classpath.txt").text = sourceSets.main.runtimeClasspath.join("\n")
+  }
+}
+
+// Add the classpath file to the test runtime classpath
+dependencies {
   testCompile gradleTestKit()
-  testRuntime "junit:junit:4.12"
+  testCompile "junit:junit:4.12"
+  testRuntime files(createClasspathManifest)
 }
 
 test {
