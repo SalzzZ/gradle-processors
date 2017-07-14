@@ -1,10 +1,5 @@
 #!/usr/bin/env groovy
 node("aws-ecs-small") {
-    def global_pipeline
-
-    configFileProvider([configFile(fileId: 'global-pipeline-groovy', targetLocation: 'global_pipeline.groovy')]) {
-        global_pipeline = load 'global_pipeline.groovy'
-    }
 
     stage('Checkout') {
         checkout scm
@@ -18,13 +13,15 @@ node("aws-ecs-small") {
         stash name: "$JOB_NAME-$BUILD_NUMBER", useDefaultExcludes: false
     }
 }
-stage('Promotion'){
-    input message: 'Publish to artifactory?'
+
+timeout(time: 1, unit: 'DAYS') {    
+    stage('Promotion'){
+        input message: 'Publish to artifactory?'
+    }
 }
 
 node("aws-ecs-small") {
     stage('Publish') {
-        currentBuild.description = "This is published"
         unstash "$JOB_NAME-$BUILD_NUMBER"
         sshagent(['jenkins-master-phabricator-pushable']) {
             withCredentials([usernamePassword(credentialsId: 'artifactory-deployer', passwordVariable: 'ORG_GRADLE_PROJECT_maven_password', usernameVariable: 'ORG_GRADLE_PROJECT_maven_user')]) {
@@ -33,6 +30,7 @@ node("aws-ecs-small") {
             }
         }
         def VERSION = sh script: "git describe --tags --always", returnStdout: true
+        currentBuild.description = "This is published"
         currentBuild.displayName = "#$BUILD_NUMBER - $VERSION"
     }
 }
