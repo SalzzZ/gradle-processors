@@ -14,7 +14,7 @@ node("aws-ecs-small") {
     }
 }
 
-timeout(time: 1, unit: 'DAYS') {    
+timeout(time: 1, unit: 'DAYS') {
     stage('Promotion'){
         input message: 'Publish to artifactory?'
     }
