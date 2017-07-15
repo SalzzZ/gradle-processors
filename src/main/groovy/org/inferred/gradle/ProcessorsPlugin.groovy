@@ -25,12 +25,7 @@ class ProcessorsPlugin implements Plugin<Project> {
     /**** javac, groovy, etc. *********************************************************************/
     project.plugins.withType(JavaPlugin, { plugin ->
       project.sourceSets.each { it.compileClasspath += project.configurations.processor }
-      project.compileJava.dependsOn project.task('processorPath', {
-        doLast {
-          String path = getProcessors(project).getAsPath()
-          project.compileJava.options.compilerArgs += ["-processorpath", path]
-        }
-      })
+      project.compileJava.options.annotationProcessorPath = project.configurations.processor
       project.javadoc.dependsOn project.task('javadocProcessors', {
         doLast {
           Set<File> path = getProcessors(project).files
