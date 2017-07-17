@@ -90,8 +90,8 @@ class ProcessorsPlugin implements Plugin<Project> {
           //   the default values.
           project.idea.extensions.create('processors', IdeaProcessorsExtension)
           project.idea.processors {
-            outputDir = 'generated_src'
-            testOutputDir = 'generated_testSrc'
+            outputDir = 'generated-src/main/java'
+            testOutputDir = 'generated-src/test/java'
           }
         }
 
@@ -314,7 +314,7 @@ class ProcessorsPlugin implements Plugin<Project> {
     if (project.rootProject.hasProperty('idea') && project.rootProject.idea.hasProperty('processors')) {
       return project.rootProject.idea.processors.outputDir
     } else {
-      return 'generated_src'
+      return 'generated-src/main/java'
     }
   }
 
@@ -322,7 +322,7 @@ class ProcessorsPlugin implements Plugin<Project> {
     if (project.rootProject.hasProperty('idea') && project.rootProject.idea.hasProperty('processors')) {
       return project.rootProject.idea.processors.testOutputDir
     } else {
-      return 'generated_testSrc'
+      return 'generated-src/test/java'
     }
   }
 
