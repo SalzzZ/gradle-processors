@@ -29,8 +29,8 @@ class ProcessorsPluginTest {
     project.pluginManager.apply 'idea'
     project.pluginManager.apply 'java'
 
-    assertEquals 'generated_src', project.idea.processors.outputDir
-    assertEquals 'generated_testSrc', project.idea.processors.testOutputDir
+    assertEquals 'generated-src/main/java', project.idea.processors.outputDir
+    assertEquals 'generated-src/test/java', project.idea.processors.testOutputDir
   }
 
   @Test
@@ -62,10 +62,10 @@ class ProcessorsPluginTest {
     project.pluginManager.apply 'java'
     project.pluginManager.apply 'idea'
 
-    assertTrue project.idea.module.sourceDirs.contains(project.file('generated_src'))
-    assertTrue project.idea.module.generatedSourceDirs.contains(project.file('generated_src'))
-    assertTrue project.idea.module.testSourceDirs.contains(project.file('generated_testSrc'))
-    assertTrue project.idea.module.generatedSourceDirs.contains(project.file('generated_testSrc'))
+    assertTrue project.idea.module.sourceDirs.contains(project.file('generated-src/main/java'))
+    assertTrue project.idea.module.generatedSourceDirs.contains(project.file('generated-src/main/java'))
+    assertTrue project.idea.module.testSourceDirs.contains(project.file('generated-src/test/java'))
+    assertTrue project.idea.module.generatedSourceDirs.contains(project.file('generated-src/test/java'))
   }
 
   @Test

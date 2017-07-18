@@ -450,7 +450,7 @@ public class ProcessorsPluginFunctionalTest {
     File testProjectDirRoot = testProjectDir.getRoot()
     // create generated source directories
     testProjectDir.newFolder('generated-src/main')
-    testProjectDir.newFolder('generated-src/test')
+    testProjectDir.newFolder('generated-src/test/java')
 
     GradleRunner.create()
             .withProjectDir(testProjectDirRoot)
@@ -466,7 +466,7 @@ public class ProcessorsPluginFunctionalTest {
 
     def expected = ['file://$MODULE_DIR$/src/main/java',
                     'file://$MODULE_DIR$/generated-src/main',
-                    'file://$MODULE_DIR$/generated-src/test'].toSet()
+                    'file://$MODULE_DIR$/generated-src/test/java'].toSet()
     assertEquals(expected, sourceFolderUrls.toSet())
   }
 
@@ -506,7 +506,7 @@ public class ProcessorsPluginFunctionalTest {
 
     def expected = ['file://$MODULE_DIR$/src/main/java',
                     'file://$MODULE_DIR$/generated-src/main',
-                    'file://$MODULE_DIR$/generated-src/test'].toSet()
+                    'file://$MODULE_DIR$/generated-src/test/java'].toSet()
     assertEquals(expected, sourceFolderUrls.toSet())
   }
 
@@ -635,7 +635,7 @@ public class ProcessorsPluginFunctionalTest {
           <annotationProcessing>
             <profile default="true" name="Default" enabled="true">
               <sourceOutputDir name="../generated-src/main"/>
-              <sourceTestOutputDir name="../generated-src/test"/>
+              <sourceTestOutputDir name="../generated-src/test/java"/>
               <outputRelativeToContentRoot value="true"/>
               <processorPath useClasspath="true"/>
             </profile>
@@ -677,7 +677,7 @@ public class ProcessorsPluginFunctionalTest {
           <annotationProcessing>
             <profile default="true" name="Default" enabled="true">
               <sourceOutputDir name="../generated-src/main"/>
-              <sourceTestOutputDir name="../generated-src/test"/>
+              <sourceTestOutputDir name="../generated-src/test/java"/>
               <outputRelativeToContentRoot value="true"/>
               <processorPath useClasspath="true"/>
             </profile>
@@ -882,7 +882,7 @@ public class ProcessorsPluginFunctionalTest {
           <annotationProcessing>
             <profile default="true" name="Default" enabled="true">
               <sourceOutputDir name="../generated-src/main"/>
-              <sourceTestOutputDir name="../generated-src/test"/>
+              <sourceTestOutputDir name="../generated-src/test/java"/>
               <outputRelativeToContentRoot value="true"/>
               <processorPath useClasspath="true"/>
             </profile>
@@ -983,7 +983,7 @@ public class ProcessorsPluginFunctionalTest {
           <annotationProcessing>
             <profile default="true" name="Default" enabled="true">
               <sourceOutputDir name="../generated-src/main"/>
-              <sourceTestOutputDir name="../generated-src/test"/>
+              <sourceTestOutputDir name="../generated-src/test/java"/>
               <outputRelativeToContentRoot value="true"/>
               <processorPath useClasspath="true"/>
             </profile>
