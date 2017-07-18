@@ -449,8 +449,8 @@ public class ProcessorsPluginFunctionalTest {
 
     File testProjectDirRoot = testProjectDir.getRoot()
     // create generated source directories
-    testProjectDir.newFolder('generated_src')
-    testProjectDir.newFolder('generated_testSrc')
+    testProjectDir.newFolder('generated-src/main')
+    testProjectDir.newFolder('generated-src/test')
 
     GradleRunner.create()
             .withProjectDir(testProjectDirRoot)
@@ -465,8 +465,8 @@ public class ProcessorsPluginFunctionalTest {
     }
 
     def expected = ['file://$MODULE_DIR$/src/main/java',
-                    'file://$MODULE_DIR$/generated_src',
-                    'file://$MODULE_DIR$/generated_testSrc'].toSet()
+                    'file://$MODULE_DIR$/generated-src/main',
+                    'file://$MODULE_DIR$/generated-src/test'].toSet()
     assertEquals(expected, sourceFolderUrls.toSet())
   }
 
@@ -505,8 +505,8 @@ public class ProcessorsPluginFunctionalTest {
     }
 
     def expected = ['file://$MODULE_DIR$/src/main/java',
-                    'file://$MODULE_DIR$/generated_src',
-                    'file://$MODULE_DIR$/generated_testSrc'].toSet()
+                    'file://$MODULE_DIR$/generated-src/main',
+                    'file://$MODULE_DIR$/generated-src/test'].toSet()
     assertEquals(expected, sourceFolderUrls.toSet())
   }
 
@@ -634,8 +634,8 @@ public class ProcessorsPluginFunctionalTest {
         <component name="CompilerConfiguration">
           <annotationProcessing>
             <profile default="true" name="Default" enabled="true">
-              <sourceOutputDir name="../generated_src"/>
-              <sourceTestOutputDir name="../generated_testSrc"/>
+              <sourceOutputDir name="../generated-src/main"/>
+              <sourceTestOutputDir name="../generated-src/test"/>
               <outputRelativeToContentRoot value="true"/>
               <processorPath useClasspath="true"/>
             </profile>
@@ -676,8 +676,8 @@ public class ProcessorsPluginFunctionalTest {
         <component name="CompilerConfiguration">
           <annotationProcessing>
             <profile default="true" name="Default" enabled="true">
-              <sourceOutputDir name="../generated_src"/>
-              <sourceTestOutputDir name="../generated_testSrc"/>
+              <sourceOutputDir name="../generated-src/main"/>
+              <sourceTestOutputDir name="../generated-src/test"/>
               <outputRelativeToContentRoot value="true"/>
               <processorPath useClasspath="true"/>
             </profile>
@@ -804,7 +804,7 @@ public class ProcessorsPluginFunctionalTest {
     def xml = new XmlSlurper().parse(testProjectDirRoot.toPath().resolve("${testProjectDirRoot.name}.ipr").toFile())
     def compilerConfiguration = xml.component.findResult { it.@name == "CompilerConfiguration" ? it : null }
     def profile = compilerConfiguration.annotationProcessing.profile.findResult { it.@name == "Default" ? it : null }
-    assertEquals(profile.sourceOutputDir.first().@name, "generated_src")
+    assertEquals(profile.sourceOutputDir.first().@name, "generated-src/main")
   }
 
   /** @see https://github.com/palantir/gradle-processors/issues/12 */
@@ -881,8 +881,8 @@ public class ProcessorsPluginFunctionalTest {
         <component name="CompilerConfiguration">
           <annotationProcessing>
             <profile default="true" name="Default" enabled="true">
-              <sourceOutputDir name="../generated_src"/>
-              <sourceTestOutputDir name="../generated_testSrc"/>
+              <sourceOutputDir name="../generated-src/main"/>
+              <sourceTestOutputDir name="../generated-src/test"/>
               <outputRelativeToContentRoot value="true"/>
               <processorPath useClasspath="true"/>
             </profile>
@@ -982,8 +982,8 @@ public class ProcessorsPluginFunctionalTest {
         <component name="CompilerConfiguration">
           <annotationProcessing>
             <profile default="true" name="Default" enabled="true">
-              <sourceOutputDir name="../generated_src"/>
-              <sourceTestOutputDir name="../generated_testSrc"/>
+              <sourceOutputDir name="../generated-src/main"/>
+              <sourceTestOutputDir name="../generated-src/test"/>
               <outputRelativeToContentRoot value="true"/>
               <processorPath useClasspath="true"/>
             </profile>
