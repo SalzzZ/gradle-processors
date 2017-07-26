@@ -16,11 +16,11 @@ import org.gradle.plugins.ide.eclipse.EclipsePlugin
 import org.gradle.plugins.ide.idea.IdeaPlugin
 
 class ProcessorsPlugin implements Plugin<Project> {
-
+  static ProcessorsExtension extension
   void apply(Project project) {
 
     project.configurations.create('processor')
-    project.extensions.create('processors', ProcessorsExtension)
+    extension = project.extensions.create('processors', ProcessorsExtension)
 
     /**** javac, groovy, etc. *********************************************************************/
     project.plugins.withType(JavaPlugin, { plugin ->
@@ -83,18 +83,6 @@ class ProcessorsPlugin implements Plugin<Project> {
     /**** IntelliJ ********************************************************************************/
     project.plugins.withType(IdeaPlugin, { plugin ->
       project.plugins.withType(JavaPlugin, { javaPlugin ->
-        if (project == project.rootProject) {
-          // Generated source directories can only be specified per-workspace in IntelliJ.
-          // As such, it only makes sense to allow the user to configure them on the root project.
-          // If the gradle-processors plugin is not applied to the root project, we just use
-          //   the default values.
-          project.idea.extensions.create('processors', IdeaProcessorsExtension)
-          project.idea.processors {
-            outputDir = 'generated-src/main/java'
-            testOutputDir = 'generated-src/test/java'
-          }
-        }
-
         if (project.idea.module.scopes.PROVIDED != null) {
           project.idea.module.scopes.PROVIDED.plus += [project.configurations.processor]
         }
@@ -311,19 +299,11 @@ class ProcessorsPlugin implements Plugin<Project> {
   }
 
   private static String getIdeaSourceOutputDir(Project project) {
-    if (project.rootProject.hasProperty('idea') && project.rootProject.idea.hasProperty('processors')) {
-      return project.rootProject.idea.processors.outputDir
-    } else {
-      return 'generated-src/main/java'
-    }
+    return extension.ideaOutputDir
   }
 
   private static String getIdeaSourceTestOutputDir(Project project) {
-    if (project.rootProject.hasProperty('idea') && project.rootProject.idea.hasProperty('processors')) {
-      return project.rootProject.idea.processors.testOutputDir
-    } else {
-      return 'generated-src/test/java'
-    }
+    return extension.ideaTestOutputDir
   }
 
   private static Class getJacocoReportClass() {
@@ -340,13 +320,10 @@ class ProcessorsPlugin implements Plugin<Project> {
 
 class ProcessorsExtension {
   boolean suppressFindbugs = true
+  String ideaOutputDir = 'generated-src/main/java'
+  String ideaTestOutputDir = 'generated-src/test/java'
 }
 
 class EclipseProcessorsExtension {
   Object outputDir
-}
-
-class IdeaProcessorsExtension {
-  Object outputDir
-  Object testOutputDir
 }

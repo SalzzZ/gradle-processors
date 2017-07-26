@@ -521,9 +521,9 @@ public class ProcessorsPluginFunctionalTest {
         processor 'org.immutables:value:2.0.21'
       }
 
-      idea.processors {
-        outputDir = 'something'
-        testOutputDir = 'something_else'
+      processors {
+        ideaOutputDir = 'something'
+        ideaTestOutputDir = 'something_else'
       }
     """
 
@@ -570,9 +570,9 @@ public class ProcessorsPluginFunctionalTest {
         processor 'org.immutables:value:2.0.21'
       }
 
-      idea.processors {
-        outputDir = 'something'
-        testOutputDir = 'something_else'
+      processors {
+        ideaOutputDir = 'something'
+        ideaTestOutputDir = 'something_else'
       }
     """
 
@@ -696,9 +696,9 @@ public class ProcessorsPluginFunctionalTest {
       apply plugin: 'idea'
       apply plugin: 'org.inferred.processors'
 
-      idea.processors {
-        outputDir = 'foo'
-        testOutputDir = 'bar'
+      processors {
+        ideaOutputDir = 'foo'
+        ideaTestOutputDir = 'bar'
       }
     """
 
@@ -722,9 +722,9 @@ public class ProcessorsPluginFunctionalTest {
       apply plugin: 'idea'
       apply plugin: 'org.inferred.processors'
 
-      idea.processors {
-        outputDir = 'foo'
-        testOutputDir = 'bar'
+      processors {
+        ideaOutputDir = 'foo'
+        ideaTestOutputDir = 'bar'
       }
     """
 
@@ -902,9 +902,9 @@ public class ProcessorsPluginFunctionalTest {
       apply plugin: 'org.inferred.processors'
       apply plugin: 'idea'
 
-      idea.processors {
-        outputDir = 'foo'
-        testOutputDir = 'bar'
+      processors {
+        ideaOutputDir = 'foo'
+        ideaTestOutputDir = 'bar'
       }
     """
 
