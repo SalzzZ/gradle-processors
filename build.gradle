@@ -50,6 +50,7 @@ publishing {
   publications {
     mavenJava(MavenPublication) {
       from components.java
+      version project.version.toString() + "-traveloka"
     }
   }
   repositories {

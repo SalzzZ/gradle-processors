@@ -636,7 +636,7 @@ public class ProcessorsPluginFunctionalTest {
             <profile default="true" name="Default" enabled="true">
               <sourceOutputDir name="../generated-src/main/java"/>
               <sourceTestOutputDir name="../generated-src/test/java"/>
-              <outputRelativeToContentRoot value="true"/>
+              <outputRelativeToContentRoot value="false"/>
               <processorPath useClasspath="true"/>
             </profile>
           </annotationProcessing>
@@ -708,7 +708,7 @@ public class ProcessorsPluginFunctionalTest {
             <profile default="true" name="Default" enabled="true">
               <sourceOutputDir name="../generated-src/main/java"/>
               <sourceTestOutputDir name="../generated-src/test/java"/>
-              <outputRelativeToContentRoot value="true"/>
+              <outputRelativeToContentRoot value="false"/>
               <processorPath useClasspath="true"/>
             </profile>
           </annotationProcessing>
@@ -782,7 +782,7 @@ public class ProcessorsPluginFunctionalTest {
             <profile default="true" name="Default" enabled="true">
               <sourceOutputDir name="../foo"/>
               <sourceTestOutputDir name="../bar"/>
-              <outputRelativeToContentRoot value="true"/>
+              <outputRelativeToContentRoot value="false"/>
               <processorPath useClasspath="true"/>
             </profile>
           </annotationProcessing>
@@ -913,7 +913,7 @@ public class ProcessorsPluginFunctionalTest {
             <profile default="true" name="Default" enabled="true">
               <sourceOutputDir name="../generated-src/main/java"/>
               <sourceTestOutputDir name="../generated-src/test/java"/>
-              <outputRelativeToContentRoot value="true"/>
+              <outputRelativeToContentRoot value="false"/>
               <processorPath useClasspath="true"/>
             </profile>
           </annotationProcessing>
@@ -962,7 +962,7 @@ public class ProcessorsPluginFunctionalTest {
             <profile default="true" name="Default" enabled="true">
               <sourceOutputDir name="../foo"/>
               <sourceTestOutputDir name="../bar"/>
-              <outputRelativeToContentRoot value="true"/>
+              <outputRelativeToContentRoot value="false"/>
               <processorPath useClasspath="true"/>
             </profile>
           </annotationProcessing>
@@ -1014,7 +1014,7 @@ public class ProcessorsPluginFunctionalTest {
             <profile default="true" name="Default" enabled="true">
               <sourceOutputDir name="../generated-src/main/java"/>
               <sourceTestOutputDir name="../generated-src/test/java"/>
-              <outputRelativeToContentRoot value="true"/>
+              <outputRelativeToContentRoot value="false"/>
               <processorPath useClasspath="true"/>
             </profile>
           </annotationProcessing>
