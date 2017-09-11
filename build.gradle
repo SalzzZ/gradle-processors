@@ -14,8 +14,8 @@ targetCompatibility = 1.7
 group = "com.traveloka.common.gradle"
 
 dependencies {
-  compile localGroovy()
-  compile 'org.codehaus.groovy:groovy-backports-compat23:2.3.5'
+  implementation localGroovy()
+  implementation 'org.codehaus.groovy:groovy-backports-compat23:2.3.5'
 }
 
 //// Tests ////////////////////////////////////////////////////////////////////////////
@@ -35,8 +35,8 @@ task createClasspathManifest {
 
 // Add the classpath file to the test runtime classpath
 dependencies {
-  testCompile gradleTestKit()
-  testCompile "junit:junit:4.12"
+  testImplementation gradleTestKit()
+  testImplementation "junit:junit:4.12"
   testRuntime files(createClasspathManifest)
 }
 
