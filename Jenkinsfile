@@ -9,7 +9,7 @@ node("aws-ecs-small") {
     }
 
     stage('Build') {
-        sh "./gradlew -qs jar"
+        sh "./gradlew -qs build"
         stash name: "$JOB_NAME-$BUILD_NUMBER", useDefaultExcludes: false
     }
 }
